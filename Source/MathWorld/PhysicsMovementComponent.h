@@ -7,6 +7,7 @@
 #include "PhysicsMovementComponent.generated.h"
 
 
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MATHWORLD_API UPhysicsMovementComponent : public UActorComponent
 {
@@ -24,5 +25,19 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Mass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector VelocityVector; // [m s^-1] // average veclocity this tick
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector NetForceVector; // N [kg m s^-2]
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FVector> ForceVectorArray;
+	
+	//FTransform Transform;
+	UFUNCTION(BlueprintCallable)
+	void AddForces();
 };
