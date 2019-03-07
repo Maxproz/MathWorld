@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.25807.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.22310.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{054D607A-1F41-442B-9DC6-0D8CBC8E5883}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{6CAD17B6-776E-47F8-8BB8-C665CCA93771}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Games", "Games", "{8B884B9C-7A54-4637-8EDD-F94C5353F808}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Games", "Games", "{4319971E-9415-4AF7-BCF6-249E160657C4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UE4", "Intermediate\ProjectFiles\UE4.vcxproj", "{546993A9-92B1-4382-A87E-FD38D8C6CE1A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MathWorld", "Intermediate\ProjectFiles\MathWorld.vcxproj", "{E751BC89-A6B6-4D7D-9818-88AA83E54F0D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Visualizers", "Visualizers", "{B310C0DE-D89C-47E2-80A0-BF9E40E25628}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Visualizers", "Visualizers", "{3034CEEA-1D14-4551-A2B1-E8BFEDFDD3E3}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\UE_4.21\Engine\Extras\VisualStudioDebugging\UE4.natvis = ..\..\UE_4.21\Engine\Extras\VisualStudioDebugging\UE4.natvis
 	EndProjectSection
@@ -99,7 +99,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{546993A9-92B1-4382-A87E-FD38D8C6CE1A} = {054D607A-1F41-442B-9DC6-0D8CBC8E5883}
-		{E751BC89-A6B6-4D7D-9818-88AA83E54F0D} = {8B884B9C-7A54-4637-8EDD-F94C5353F808}
+		{546993A9-92B1-4382-A87E-FD38D8C6CE1A} = {6CAD17B6-776E-47F8-8BB8-C665CCA93771}
+		{E751BC89-A6B6-4D7D-9818-88AA83E54F0D} = {4319971E-9415-4AF7-BCF6-249E160657C4}
 	EndGlobalSection
 EndGlobal
