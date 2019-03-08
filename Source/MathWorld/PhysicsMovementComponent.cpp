@@ -4,6 +4,8 @@
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
 #include "Runtime/CoreUObject/Public/UObject/UObjectIterator.h"
 
+#include "Runtime/Engine/Public/DrawDebugHelpers.h"
+
 class AActor;
 
 
@@ -14,6 +16,8 @@ UPhysicsMovementComponent::UPhysicsMovementComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
+
+	Mass = 1;
 	// ...
 }
 
@@ -25,6 +29,15 @@ void UPhysicsMovementComponent::BeginPlay()
 
 	// ...
 	
+	// CODE FOR SHOWTRAILS INITIALIZATION
+	//forceVectorList = GetComponent<PhysicsEngine>().forceVectorList;
+
+	//lineRenderer = gameObject.AddComponent<LineRenderer>();
+	//lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+	//lineRenderer.SetColors(Color.yellow, Color.yellow);
+	//lineRenderer.SetWidth(0.2F, 0.2F);
+	//lineRenderer.useWorldSpace = false;
+
 }
 
 
@@ -35,34 +48,69 @@ void UPhysicsMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 
 	// ...
 	AddForces();
+	UpdateVelocity(DeltaTime);
 
-	if (NetForceVector == FVector::ZeroVector)
+	// We dont need the unbalanced force detected code anymore because we 
+	// make changes to the velocity vector inside UpdateVelocityNow?
+	
+	AActor* OwningActor = GetOwner();
+	// Update Position
+	OwningActor->SetActorLocation(OwningActor->GetActorLocation() + (VelocityVector * DeltaTime));
+
+	//if (NetForceVector == FVector::ZeroVector)
+	//{
+	//	// if there is no net force 
+	//	// update position
+	//
+	//	//if (OwningActor)
+	//	//{
+	//	//	UE_LOG(LogTemp, Warning, TEXT("Found Owner"));
+
+	//	//}
+	//	//FTransform* OwningActorTransform = &(OwningActor->GetTransform());
+	//	
+	//	//if (OwningActor)
+	//	//{
+	//	//	//"MyCharacter's Location is %s"
+	//	//	UE_LOG(LogTemp, Warning, TEXT("MyCharacter's Location is %s"),
+	//	//		*OwningActor->GetActorLocation().ToString());
+	//	//}
+
+
+	//}
+	//else
+	//{
+	//	// if there is a net force 
+	//	// log error for now
+	//	UE_LOG(LogTemp, Warning, TEXT("Unbalanced Force Detected!!!"));
+
+	//}
+
+	if (ShowTrails)
 	{
-		// if there is no net force 
-		// update position
+		//lineRenderer.enabled = true;
+		NumberOfForces = ForceVectorArray.Num();
+		//lineRenderer.SetVertexCount(NumberOfForces * 2);
+		//int i = 0;
 		AActor* OwningActor = GetOwner();
-		//if (OwningActor)
-		//{
-		//	UE_LOG(LogTemp, Warning, TEXT("Found Owner"));
-
-		//}
-		//FTransform* OwningActorTransform = &(OwningActor->GetTransform());
-		
-		//if (OwningActor)
-		//{
-		//	//"MyCharacter's Location is %s"
-		//	UE_LOG(LogTemp, Warning, TEXT("MyCharacter's Location is %s"),
-		//		*OwningActor->GetActorLocation().ToString());
-		//}
-
-		OwningActor->SetActorLocation(OwningActor->GetActorLocation() + (VelocityVector * DeltaTime));
+		for (FVector FrceVector : ForceVectorArray)
+		{
+			DrawDebugLine(
+				GetWorld(),
+				FVector(OwningActor->GetActorLocation()),// FVector::ZeroVector
+				FVector(-FrceVector), // -ForceVector
+				FColor(255, 255, 0),
+				false, -1, 0,
+				15
+			);
+			//lineRenderer.SetPosition(i, Vector3.zero);
+			//lineRenderer.SetPosition(i + 1, );
+			//i = i + 2;
+		}
 	}
 	else
 	{
-		// if there is a net force 
-		// log error for now
-		UE_LOG(LogTemp, Warning, TEXT("Unbalanced Force Detected!!!"));
-
+		//lineRenderer.enabled = false;
 	}
 }
 
@@ -79,5 +127,12 @@ void UPhysicsMovementComponent::AddForces()
 
 
 	
+}
+
+void UPhysicsMovementComponent::UpdateVelocity(const float& DeltaTime)
+{
+	FVector AccelerationVector = NetForceVector / Mass;
+	VelocityVector = VelocityVector + (AccelerationVector * DeltaTime);
+
 }
 
