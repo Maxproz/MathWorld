@@ -29,7 +29,8 @@ void UPhysicsMovementComponent::BeginPlay()
 
 	// ...
 	
-	// CODE FOR SHOWTRAILS INITIALIZATION
+	// CODE FOR SHOWTRAILS INITIALIZATION 
+	// NOTE: UNUSED just for reference on another way it was done.
 	//forceVectorList = GetComponent<PhysicsEngine>().forceVectorList;
 
 	//lineRenderer = gameObject.AddComponent<LineRenderer>();
@@ -47,15 +48,13 @@ void UPhysicsMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
-	AddForces();
-	UpdateVelocity(DeltaTime);
+	// RenderTrails() TODO: Fix Trails code on forces
+	UpdatePosition(DeltaTime);
 
 	// We dont need the unbalanced force detected code anymore because we 
 	// make changes to the velocity vector inside UpdateVelocityNow?
 	
-	AActor* OwningActor = GetOwner();
-	// Update Position
-	OwningActor->SetActorLocation(OwningActor->GetActorLocation() + (VelocityVector * DeltaTime));
+
 
 	//if (NetForceVector == FVector::ZeroVector)
 	//{
@@ -86,36 +85,39 @@ void UPhysicsMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 
 	//}
 
-	if (ShowTrails)
-	{
-		//lineRenderer.enabled = true;
-		NumberOfForces = ForceVectorArray.Num();
-		//lineRenderer.SetVertexCount(NumberOfForces * 2);
-		//int i = 0;
-		AActor* OwningActor = GetOwner();
-		for (FVector FrceVector : ForceVectorArray)
-		{
-			DrawDebugLine(
-				GetWorld(),
-				FVector(OwningActor->GetActorLocation()),// FVector::ZeroVector
-				FVector(-FrceVector), // -ForceVector
-				FColor(255, 255, 0),
-				false, -1, 0,
-				15
-			);
-			//lineRenderer.SetPosition(i, Vector3.zero);
-			//lineRenderer.SetPosition(i + 1, );
-			//i = i + 2;
-		}
-	}
-	else
-	{
-		//lineRenderer.enabled = false;
-	}
+	//if (ShowTrails)
+	//{
+	//	//lineRenderer.enabled = true;
+	//	NumberOfForces = ForceVectorArray.Num();
+	//	//lineRenderer.SetVertexCount(NumberOfForces * 2);
+	//	//int i = 0;
+	//	AActor* OwningActor = GetOwner();
+	//	for (FVector FrceVector : ForceVectorArray)
+	//	{
+	//		DrawDebugLine(
+	//			GetWorld(),
+	//			FVector(OwningActor->GetActorLocation()),// FVector::ZeroVector
+	//			FVector(-FrceVector), // -ForceVector
+	//			FColor(255, 255, 0),
+	//			false, -1, 0,
+	//			15
+	//		);
+	//		//lineRenderer.SetPosition(i, Vector3.zero);
+	//		//lineRenderer.SetPosition(i + 1, );
+	//		//i = i + 2;
+	//	}
+	//}
+	//else
+	//{
+	//	//lineRenderer.enabled = false;
+	//}
 }
 
-void UPhysicsMovementComponent::AddForces()
+
+
+void UPhysicsMovementComponent::UpdatePosition(const float& DeltaTime)
 {
+	// Sum forces and clear list
 	NetForceVector = FVector::ZeroVector;
 
 	for (const FVector& ForceVector : ForceVectorArray)
@@ -124,15 +126,19 @@ void UPhysicsMovementComponent::AddForces()
 
 		NetForceVector = NetForceVector + ForceVector;
 	}
+	ForceVectorArray.Empty();
 
 
-	
-}
-
-void UPhysicsMovementComponent::UpdateVelocity(const float& DeltaTime)
-{
+	// Calculate Position change due to net force
 	FVector AccelerationVector = NetForceVector / Mass;
 	VelocityVector = VelocityVector + (AccelerationVector * DeltaTime);
+	AActor* OwningActor = GetOwner();
+	// Update Position
+	OwningActor->SetActorLocation(OwningActor->GetActorLocation() + (VelocityVector * DeltaTime));
+}
 
+void UPhysicsMovementComponent::AddForce(const FVector& InForceVector)
+{
+	ForceVectorArray.Add(InForceVector);
 }
 

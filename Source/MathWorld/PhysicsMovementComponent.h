@@ -34,27 +34,26 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector NetForceVector; // N [kg m s^-2]
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<FVector> ForceVectorArray;
 	
-	//FTransform Transform;
+
+	void UpdatePosition(const float& DeltaTime);
+
 	UFUNCTION(BlueprintCallable)
-	void AddForces();
-
-	void UpdateVelocity(const float& DeltaTime);
-
+	void AddForce(const FVector& InForceVector);
 
 	// TODO: Move this code to another class?
 	// DrawDebug Code class
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Debug")
-	bool ShowTrails = true;
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Debug")
-	//TArray<FVector> forceVectorList;
-	//private LineRenderer lineRenderer;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Debug")
-	int NumberOfForces;
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Debug")
+	//bool ShowTrails = true;
+	////UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Debug")
+	////TArray<FVector> forceVectorList;
+	////private LineRenderer lineRenderer;
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Debug")
+	//int NumberOfForces;
 
 	/*DrawDebugPoint(
 	//in a non-Static class
